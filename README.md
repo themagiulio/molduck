@@ -2,7 +2,7 @@
 
 <img align="right" width="auto" height="100" src="./projects/webserver/static/assets/logo.png">
 
-Molduck is a webserver and cli for QM and MM chemistry calculations.
+Molduck is a webserver and cli for quantum chemistry calculations.
 
 - **Webserver**: the webserver does the calculations and accepts requests written according to the [MolSSI QC Schema](https://molssi-qc-schema.readthedocs.io/en/latest/index.html).
 - **CLI**: the cli works as a frontend and middleman as it lets you make requests to the webserver and use input files written in several formats.
