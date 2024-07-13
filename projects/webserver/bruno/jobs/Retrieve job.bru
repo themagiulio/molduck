@@ -1,0 +1,15 @@
+meta {
+  name: Retrieve job
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/{{version}}/jobs/{{jobId}}/
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  jobId: 5f521d06-6c3f-49b0-b0c9-cbd7d6a08f33
+}
