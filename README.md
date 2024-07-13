@@ -1,6 +1,6 @@
 # Molduck
 
-<img align="right" width="auto" height="100" src="./projects/webserver/static/assets/logo.png">
+<img align="right" width="auto" height="100" src="./public/logo.png">
 
 Molduck is a webserver and cli for quantum chemistry calculations.
 
