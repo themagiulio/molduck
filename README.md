@@ -55,6 +55,6 @@ TO DO
 
 ## License
 
-TO DO
+Molduck is licensed under the [Apache 2.0 with Commons Clause license](./LICENSE).
 
 Duck artwork created by [Adnan_111](https://adnan-111.itch.io/duck-assets-pack).
