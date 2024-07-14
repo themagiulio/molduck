@@ -3,15 +3,16 @@
 Webserver
 =========
 
-Start a calculation
--------------------
+The webserver lets you run jobs by making HTTP requests.
+
+Example of an HTTP request made in a Python script:
 
 ..  code-block:: python
 
   import requests
 
-  requests.get(
-    "https://example.com/api/",
+  requests.post(
+    "https://example.com/api/v1/jobs/",
     json={
       "molecule": {
         "geometry": [
@@ -32,4 +33,4 @@ Start a calculation
 Endpoints
 ---------
 
-TO DO
+.. openapi:: ../../openapi.json

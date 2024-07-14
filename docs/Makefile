@@ -21,6 +21,9 @@ deploy:
 	@cp $(ASSETSDIR)/redirect.html $(BUILDDIR)/html/index.html
 	@surge $(BUILDDIR)/html molduck.surge.sh
 
+watch:
+	@sphinx-autobuild $(SOURCEDIR) $(BUILDDIR)/html
+
 .PHONY: help Makefile
 
 # Catch-all target: route all unknown targets to Sphinx using the new

@@ -17,6 +17,7 @@ author = "Giulio De Matteis"
 extensions = [
     "sphinxcontrib.httpdomain",
     "sphinx_multiversion",
+    "sphinxcontrib.openapi",
 ]
 
 templates_path = ["_templates"]

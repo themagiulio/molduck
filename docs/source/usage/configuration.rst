@@ -3,7 +3,4 @@
 Configuration
 =============
 
-Options
--------
-
 TO DO
