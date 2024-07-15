@@ -6,6 +6,12 @@ from cli.client import Client
 from cli.utils import get_status
 
 
+ALLOWED_SCHEMAS = (
+    "qcschema",
+    "json",
+)
+
+
 @click.command()
 @click.argument("job-id", type=str)
 @click.option(
@@ -22,8 +28,16 @@ from cli.utils import get_status
     default=False,
     help="Display output data.",
 )
-def info(job_id, output_data, input_data):
+@click.option(
+    "--schema",
+    default="json",
+    help="Set output schema.",
+)
+def info(job_id, output_data, input_data, schema):
     """Retrieve job information."""
+    if schema.lower() not in ALLOWED_SCHEMAS:
+        raise click.BadOptionUsage("--schema", "Invalid schema.")
+
     client = Client()
     job = client.get_job(job_id)
 
@@ -31,7 +45,13 @@ def info(job_id, output_data, input_data):
         raise click.UsageError("Cannot display output and input data at the same time.")
 
     if output_data:
-        click.echo(json.dumps(job.get("output_data"), indent=2))
+        match schema:
+            case "json":
+                click.echo(json.dumps(job.get("output_data"), indent=2))
+            case "qcschema":
+                click.echo(
+                    json.dumps(job.get("input_data") | job.get("output_data"), indent=2)
+                )
     elif input_data:
         click.echo(json.dumps(job.get("input_data"), indent=2))
     else:
