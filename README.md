@@ -48,6 +48,7 @@ Please, read the [documentation](https://molduck.surge.sh) for the full list of 
 Available methods:
 - HF: RHF, UHF.
 - KS: RKS, UKS.
+- MP2.
 
 ## Deploy
 
