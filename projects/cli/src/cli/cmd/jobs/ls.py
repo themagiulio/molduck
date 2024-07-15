@@ -2,6 +2,7 @@ import click
 from tabulate import tabulate
 
 from cli.client import Client
+from cli.utils import get_status
 
 
 @click.command()
@@ -27,7 +28,12 @@ def ls(running, completed):
     rows = []
 
     for job in jobs:
-        rows.append([job.get("uuid"), job.get("success")])
+        rows.append(
+            [
+                job.get("uuid"),
+                get_status(job.get("status")),
+            ]
+        )
 
-    table = tabulate(rows, headers=["ID", "Success"])
+    table = tabulate(rows, headers=["ID", "Status"])
     click.echo(table)

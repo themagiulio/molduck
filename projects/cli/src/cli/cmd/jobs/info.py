@@ -3,6 +3,7 @@ import json
 import click
 
 from cli.client import Client
+from cli.utils import get_status
 
 
 @click.command()
@@ -35,4 +36,4 @@ def info(job_id, output_data, input_data):
         click.echo(json.dumps(job.get("input_data"), indent=2))
     else:
         click.echo(f"Job ID: {job_id}")
-        click.echo(f"Success: {job.get("success")}")
+        click.echo(f"Status: {get_status(job.get("status"))}")
