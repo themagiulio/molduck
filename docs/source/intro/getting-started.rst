@@ -6,7 +6,16 @@ Getting Started
 Installing
 ----------
 
-TO DO
+Molduck is made up of two components: a webserver and a CLI. Please, take a look
+at the documentation of the component you want to install.
+
+.. toctree::
+   :maxdepth: 1
+   :includehidden:
+
+   ../usage/webserver
+   ../usage/cli
+
 
 Contribute
 ----------

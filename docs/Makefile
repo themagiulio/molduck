@@ -22,7 +22,7 @@ deploy:
 	@surge $(BUILDDIR)/html molduck.surge.sh
 
 watch:
-	@sphinx-autobuild $(SOURCEDIR) $(BUILDDIR)/html
+	@sphinx-autobuild $(SOURCEDIR) $(BUILDDIR)/html --port 5555
 
 .PHONY: help Makefile
 
