@@ -49,6 +49,7 @@ Available methods:
 - HF: RHF, UHF.
 - KS: RKS, UKS.
 - MP2.
+- CI: CISD, FCI.
 
 ## Deploy
 
