@@ -9,7 +9,7 @@ class Client:
     _config: Config = Config()
 
     def _mk_url(self, endpoint: str | None = None):
-        return f"{self._server}/api/{self._version}/{endpoint}/"
+        return f"{self._server}/api/{self._version}/{endpoint}"
 
     def _mk_request(self, url: str, method: str, json: dict[str, Any] = {}):
         return requests.request(
