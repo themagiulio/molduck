@@ -27,28 +27,28 @@ class Client:
         return headers
 
     def get_jobs(self):
-        url = self._mk_url("jobs")
+        url = self._mk_url("jobs/")
         response = self._mk_request(url, "GET")
 
         if response.ok:
             return response.json()
 
     def get_job(self, job_id: str):
-        url = self._mk_url(f"jobs/{job_id}")
+        url = self._mk_url(f"jobs/{job_id}/")
         response = self._mk_request(url, "GET")
 
         if response.ok:
             return response.json()
 
     def run_job(self, data):
-        url = self._mk_url("jobs")
+        url = self._mk_url("jobs/")
         response = self._mk_request(url, "POST", json=data)
 
         if response.ok:
             return response.json()
 
     def get_profile(self):
-        url = self._mk_url("users/me")
+        url = self._mk_url("users/me/")
         response = self._mk_request(url, "GET")
 
         if response.ok:
