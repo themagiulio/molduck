@@ -1,7 +1,6 @@
 import json
 
 import click
-import requests
 
 from cli.client import Client
 
