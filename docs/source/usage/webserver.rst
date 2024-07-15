@@ -34,3 +34,4 @@ Endpoints
 ---------
 
 .. openapi:: ../../openapi.json
+  
