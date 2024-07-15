@@ -1,5 +1,5 @@
-from molduck.runner.energy import energy
+from molduck.runner.energy_runner import EnergyRunner
 
 __all__ = [
-    "energy",
+    "EnergyRunner",
 ]
