@@ -1,6 +1,6 @@
 from typing import Any
 
-from pyscf import dft, scf
+from pyscf import dft, fci, scf
 
 from molduck.runner.error import Error, ErrorType
 from molduck.runner.runner import Runner
@@ -12,7 +12,11 @@ HF_METHODS = (
     "UHF",
 )
 
-POST_HF_METHODS = ("MP2",)
+POST_HF_METHODS = (
+    "MP2",
+    "CISD",
+    "FCI",
+)
 
 KS_METHODS = (
     "KS",
@@ -43,6 +47,10 @@ class EnergyRunner(Runner):
             match self.input_data.model.method.upper():
                 case "MP2":
                     self._method_function = self._moller_plesset_2
+                case "CISD":
+                    self._method_function = self._cisd
+                case "FCI":
+                    self._method_function = self._fci
                 case _:
                     self.error = Error(ErrorType.METHOD_NOT_FOUND, "Invalid method.")
                     return
@@ -78,17 +86,18 @@ class EnergyRunner(Runner):
 
     def _calc_info(self):
         return {
-            "calcinfo_nbasis": self._mf.mol.nbas,
-            "calcinfo_nmo": len(self._mf.mo_occ),
-            "calcinfo_natom": self._mf.mol.natm,
-            "calcinfo_nalpha": self._mf.mol.nelec[0],
-            "calcinfo_nbeta": self._mf.mol.nelec[1],
+            "calcinfo_nbasis": self._scf.mol.nbas,
+            "calcinfo_nmo": len(self._scf.mo_occ),
+            "calcinfo_natom": self._scf.mol.natm,
+            "calcinfo_nalpha": self._scf.mol.nelec[0],
+            "calcinfo_nbeta": self._scf.mol.nelec[1],
         }
 
     def _hartree_fock(self, method: str | None = None):
         method = getattr(scf, method or self.input_data.model.method)
         self._mf = method(self.mol)
         self._mf.verbose = False
+        self._scf = self._mf
         self._callback_function = self._hf_ks_callback
 
     def _hf_ks_callback(self):
@@ -110,6 +119,7 @@ class EnergyRunner(Runner):
         if self.input_data.keywords and self.input_data.keywords.xc:
             self._mf.xc = self.input_data.keywords.xc
 
+        self._scf = self._mf
         self._callback_function = self._hf_ks_callback
 
     def _moller_plesset_2(self):
@@ -120,6 +130,7 @@ class EnergyRunner(Runner):
         except KeyError as err:
             return self._error(ErrorType.KEYWORD_NOT_FOUND, str(err))
 
+        self._scf = self._mf
         self._mf = self._mf.MP2()
         self._callback_function = self._moller_plesset_2_callback
 
@@ -132,4 +143,50 @@ class EnergyRunner(Runner):
             "scf_total_energy": self._mf.e_hf,
             "mp2_correlation_energy": self._mf.e_corr,
             "mp2_total_energy": self._mf.e_tot,
+        }
+
+    def _cisd(self):
+        self._hartree_fock("HF")
+
+        try:
+            self._mf.run()
+        except KeyError as err:
+            return self._error(ErrorType.KEYWORD_NOT_FOUND, str(err))
+
+        self._scf = self._mf
+        self._mf = self._mf.CISD()
+        self._callback_function = self._cisd_callback
+
+    def _cisd_callback(self):
+        return {
+            "return_energy": self._mf.e_tot,
+            "scf_one_electron_energy": self._mf._scf.scf_summary.get("e1"),
+            "scf_two_electron_energy": self._mf._scf.scf_summary.get("e2"),
+            "nuclear_repulsion_energy": self._mf._scf.scf_summary.get("nuc"),
+            "scf_total_energy": self._mf.e_hf,
+            "cisd_correlation_energy": self._mf.e_corr,
+            "cisd_total_energy": self._mf.e_tot,
+        }
+
+    def _fci(self):
+        self._hartree_fock("HF")
+
+        try:
+            self._mf.run()
+        except KeyError as err:
+            return self._error(ErrorType.KEYWORD_NOT_FOUND, str(err))
+
+        self._scf = self._mf
+        self._mf = fci.FCI(self._mf)
+        self._callback_function = self._fci_callback
+
+    def _fci_callback(self):
+        return {
+            "return_energy": self._mf.e_tot,
+            "scf_one_electron_energy": self._scf.scf_summary.get("e1"),
+            "scf_two_electron_energy": self._scf.scf_summary.get("e2"),
+            "nuclear_repulsion_energy": self._scf.scf_summary.get("nuc"),
+            "scf_total_energy": self._scf.e_tot,
+            "fci_correlation_energy": self._scf.e_tot - self._mf.e_tot,
+            "fci_total_energy": self._mf.e_tot,
         }
