@@ -35,10 +35,3 @@ def create_job(request, data: schemas.QCSchemaInput):
 def retrieve_job(request, job_id: UUID):
     """Retrieve a job."""
     return get_object_or_404(Job, uuid=job_id)
-
-
-@api.get("/jobs/{job_id}/qcschema/")
-def retrieve_job_as_qcschema(request, job_id: UUID):
-    """Retrieve a job input and output as QC Schema."""
-    job = get_object_or_404(Job, uuid=job_id)
-    return {**job.input_data, **job.output_data}
