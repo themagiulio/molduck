@@ -26,13 +26,15 @@ class QCSchemaProperties(Schema):
     calcinfo_nalpha: int
     calcinfo_nbeta: int
     calcinfo_natom: int
-    return_energy: float
-    scf_one_electron_energy: float
-    scf_two_electron_energy: float
-    nuclear_repulsion_energy: float
-    scf_dipole_moment: list[float]
-    scf_iterations: int
-    scf_total_energy: float
+    return_energy: float | None = None
+    scf_one_electron_energy: float | None = None
+    scf_two_electron_energy: float | None = None
+    nuclear_repulsion_energy: float | None = None
+    scf_dipole_moment: list[float] | None = None
+    scf_iterations: int | None = None
+    scf_total_energy: float | None = None
+    mp2_correlation_energy: float | None = None
+    mp2_total_energy: float | None = None
 
 
 class QCSchemaInput(Schema):
@@ -43,7 +45,7 @@ class QCSchemaInput(Schema):
 
 
 class QCSchemaOutput(QCSchemaInput):
-    return_result: Optional[Any] | None
+    return_result: Optional[Any] | None = None
     success: bool
     properties: QCSchemaProperties
 
@@ -52,4 +54,4 @@ class Job(Schema):
     uuid: UUID
     success: bool
     input_data: QCSchemaInput
-    output_data: Optional[Any]
+    output_data: Optional[QCSchemaOutput]
