@@ -17,7 +17,7 @@ def version(request):
     return {"version": importlib.metadata.version("webserver")}
 
 
-@api.get("/jobs/", response=list[schemas.Job])
+@api.get("/jobs/", response=list[schemas.Job], exclude_none=True)
 def list_jobs(request):
     """List all jobs."""
     return Job.objects.all()
@@ -31,7 +31,7 @@ def create_job(request, data: schemas.QCSchemaInput):
     return job
 
 
-@api.get("/jobs/{job_id}/", response=schemas.Job)
+@api.get("/jobs/{job_id}/", response=schemas.Job, exclude_none=True)
 def retrieve_job(request, job_id: UUID):
     """Retrieve a job."""
     return get_object_or_404(Job, uuid=job_id)
