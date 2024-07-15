@@ -14,6 +14,8 @@ def run_job(job_id: UUID, input_data: dict[str, Any]):
     runner = None
 
     job = Job.objects.get(uuid=job_id)
+    job.status = Job.Status.RUNNING
+    job.save()
 
     # Exit if job with given id was not found
     if job is None:
@@ -32,7 +34,9 @@ def run_job(job_id: UUID, input_data: dict[str, Any]):
     output_data = runner.run()
 
     if output_data.get("success"):
-        job.success = True
+        job.status = Job.Status.SUCCEDED
+    else:
+        job.status = Job.Status.FAILED
 
     # Write output
     if output_data is not None:
