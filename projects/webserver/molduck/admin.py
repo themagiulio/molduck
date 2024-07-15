@@ -10,3 +10,8 @@ class JobAdmin(admin.ModelAdmin):
         # "created_by",
         "success",
     )
+
+    def success(self, obj) -> bool:
+        return obj.success
+
+    success.boolean = True

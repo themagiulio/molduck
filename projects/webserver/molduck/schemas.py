@@ -44,14 +44,14 @@ class QCSchemaInput(Schema):
     keywords: Optional[Keywords] = None
 
 
-class QCSchemaOutput(QCSchemaInput):
-    return_result: Optional[Any] | None = None
+class QCSchemaOutput(Schema):
+    return_result: Optional[Any]
     success: bool
     properties: QCSchemaProperties
 
 
 class Job(Schema):
     uuid: UUID
-    success: bool
+    status: int
     input_data: QCSchemaInput
     output_data: Optional[QCSchemaOutput]
